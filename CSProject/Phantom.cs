@@ -14,7 +14,11 @@ namespace CSProject
 
         Vector2 newLocation;
 
-
+        /// <summary>
+        /// Constructor for the phantom.
+        /// Spawns the monster in a random location in the maze making sure that it does not spawn in the walls.
+        /// </summary>
+        /// <param name="maze"></param>
         public Phantom(int[,] maze) : base(maze)
         {
 
@@ -34,6 +38,10 @@ namespace CSProject
 
         }
 
+        /// <summary>
+        /// Loads the sprite texture of the phantom.
+        /// </summary>
+        /// <param name="Content"></param>
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             Texture = Content.Load<Texture2D>(@"ghost64");
@@ -155,7 +163,17 @@ namespace CSProject
 
 
 
-
+        /// <summary>
+        /// Helper method for the A star algorithm.
+        /// Takes in an A star node and the map.
+        /// Checks every node around to make sure it is a valid node to be travelled to.
+        /// Checks by checking whether the nodes around it are outside the maze.
+        /// Will not check for walls as phantoms can move through walls.
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="currentnode"></param>
+        /// <param name="targetNode"></param>
+        /// <returns></returns>
         private static List<AStarNode> GetValidNodes(int[,] map, AStarNode currentnode, AStarNode targetNode)
         {
             var possiblenodes = new List<AStarNode>()
@@ -176,6 +194,12 @@ namespace CSProject
 
         }
 
+        /// <summary>
+        /// Checks every tile around the phantom up to 5 away to see if a player is within range to be attacked.
+        /// Will stop checking after going out of range and will not stop if it reaches a wall because a phantom can move through walls.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="maze"></param>
         public override void sensePlayer(Player player, int[,] maze)
         {
             if (_playerSeen) return;
