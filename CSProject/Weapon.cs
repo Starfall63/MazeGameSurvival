@@ -16,7 +16,12 @@ namespace CSProject
         protected KeyboardState currentKey;
         public string type;
        
-
+        /// <summary>
+        /// Spawns a weapon in a random place in the maze making sure it isn't inside a wall.
+        /// Assigns the type of weapon that is being created.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="t"></param>
         public Weapon(int[,] maze, string t)
         {
 

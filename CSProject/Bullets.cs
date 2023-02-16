@@ -17,7 +17,11 @@ namespace CSProject
         public string type;
         public bool isVisible;
 
-
+        /// <summary>
+        /// Constructor assigning the texture and type of bullet being created.
+        /// </summary>
+        /// <param name="newTexture"></param>
+        /// <param name="t"></param>
         public Bullets(Texture2D newTexture, string t)
         {
             Random RNG = new Random();
@@ -30,6 +34,7 @@ namespace CSProject
 
         public override void Update(GameTime gameTime)
         {
+            //Moves the bullet and the rectangle of the bullet.
             Edge = new Rectangle((int)Location.X, (int)Location.Y, 16, 16);
             Location += Velocity;
 

@@ -26,6 +26,12 @@ namespace CSProject
         }
 
         public Map() { }
+
+        /// <summary>
+        /// Goes through the map and places each collisiontile (the walls) where there is a 1.
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="size"></param>
         public void Generate(int[,] map , int size)
         {
             collisionTiles.Clear();

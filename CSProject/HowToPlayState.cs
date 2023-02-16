@@ -27,17 +27,23 @@ namespace CSProject
 
         }
 
+        /// <summary>
+        /// Loads the fonts to be used.
+        /// Loads the text that will be shown onscreen.
+        /// Initilizes any buttons that will be used.
+        /// </summary>
         public override void LoadContent()
         {
             Font = _content.Load<SpriteFont>("myfont");
 
-
+            //Initialzes the back button with its font, text and positon.
             backButton = new Button(_content.Load<Texture2D>("Button"), Font)
             {
                 Position = new Vector2(10, 10),
                 Text = "Back",
             };
 
+            //Calls the event that will happen when the back button is clicked.
             backButton.Click += backButton_Click;
 
 
@@ -60,6 +66,11 @@ namespace CSProject
 
         }
 
+        /// <summary>
+        /// Goes back to the starting menu screen when the back button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void backButton_Click(object sender, EventArgs e)
         {
             _game.ChangeState(new MenuState(_game, _graphicsDevice, _content));
