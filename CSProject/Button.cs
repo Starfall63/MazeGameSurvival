@@ -59,6 +59,7 @@ namespace CSProject
 
             _isHovering= false;
 
+            //Checks whether a mouse is hovering over the button and whether it had been clicked.
             if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering= true;
@@ -77,11 +78,13 @@ namespace CSProject
         {
            Color colour = Color.White;
 
+            //highlights the button if user is hovering over it.
             if (_isHovering)
                 colour = Color.Gray;
 
             spriteBatch.Draw(_texture,Rectangle,colour);
 
+            //Adds the text to the button and centres it.
             if (!string.IsNullOrEmpty(Text))
             {
                 var x = (Rectangle.X + (Rectangle.Width/ 2) - (_font.MeasureString(Text).X/2));

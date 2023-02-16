@@ -16,7 +16,11 @@ namespace CSProject
 
         public bool IsWall { get; set; }
 
-
+        /// <summary>
+        /// Gets the heuristic distance by adding the x distance and y distance.
+        /// </summary>
+        /// <param name="TargetX"></param>
+        /// <param name="TargetY"></param>
         public void HeuristicDistance(int TargetX, int TargetY)
         {
             this.Distance = Math.Abs(TargetX- X) + Math.Abs(TargetY- Y);
