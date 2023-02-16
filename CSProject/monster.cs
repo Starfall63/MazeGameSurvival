@@ -95,11 +95,11 @@ namespace CSProject
 
             Edge = new Rectangle((int)Location.X, (int)Location.Y, 32, 32);
 
-
+            //Will move the monster if it has not reached the new location
             if (_moving)
                 Move();
             
-        
+            //Gets the next location to be moved to if there is a path that is available and it has finished its previous movement.
             if (path.Any() && !_moving)
             {
                 setDestination();
@@ -118,7 +118,9 @@ namespace CSProject
         }
 
         
-
+        /// <summary>
+        /// Moves the monster when there is a newlocation to be moved to.
+        /// </summary>
         private void Move()
         {
             if (Location.X < newLocation.X) Location.X += _speed;
