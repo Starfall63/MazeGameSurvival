@@ -11,6 +11,12 @@ namespace CSProject
     {
         public int amount;
         public bool touched = false;
+
+        /// <summary>
+        /// Spawns in a health item in a random place in the maze making sure it isn't spawning inside a wall.
+        /// Assigns a random amount of health that can be gained between 1 and 20.
+        /// </summary>
+        /// <param name="maze"></param>
         public HealthBuff(int[,] maze)
         {
             Random RNG = new Random();

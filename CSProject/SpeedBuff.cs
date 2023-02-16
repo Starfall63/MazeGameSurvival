@@ -12,6 +12,13 @@ namespace CSProject
         public int amount;
         public int bufftime;
         public bool touched = false;
+
+        /// <summary>
+        /// Constructor that will spawn the speed item in a random place in the maze making sure it isn't inside a wall.
+        /// Assigns a random amount of speed a player will gain when picking up a speed item between 1 and 8.
+        /// Assigns the time the speed buff will last after the player has picked up the speed item.
+        /// </summary>
+        /// <param name="maze"></param>
         public SpeedBuff(int[,] maze)
         {
             Random RNG = new Random();
@@ -28,7 +35,7 @@ namespace CSProject
             Location = new Vector2((xspawn * GameState.pixelsize) + 16, (yspawn * GameState.pixelsize) + 16);
             Edge = new Rectangle((int)Location.X, (int)Location.Y, 32, 44);
             amount = RNG.Next(1, 8);
-            //bufftime = RNG.Next(5, 20);
+
             bufftime = RNG.Next(5000, 20000);
         }
 
