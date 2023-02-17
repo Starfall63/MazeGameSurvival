@@ -15,11 +15,19 @@ namespace CSProject
             health = maxhealth;
         }
 
+        /// <summary>
+        /// Returns the current health of the tile when called.
+        /// </summary>
+        /// <returns></returns>
         public int GetHealth()
         {
             return health;
         }
 
+        /// <summary>
+        /// Reduces the health of the tile when it takes damage.
+        /// </summary>
+        /// <param name="damage"></param>
         public void takeDamage(int damage)
         {
             health -= damage;
