@@ -31,7 +31,7 @@ namespace CSProject
         }
 
         /// <summary>
-        /// Loads all the fonts and textures for buttons and initialises the button.
+        /// Loads all the fonts and textures for buttons and initialises the buttons.
         /// </summary>
         public override void LoadContent()
         {
