@@ -81,7 +81,7 @@ namespace CSProject
 
         }
         /// <summary>
-        /// Loads the sprite texture of the monster
+        /// Loads the sprite texture of the monster.
         /// </summary>
         /// <param name="Content"></param>
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
@@ -95,7 +95,7 @@ namespace CSProject
 
             Edge = new Rectangle((int)Location.X, (int)Location.Y, 32, 32);
 
-            //Will move the monster if it has not reached the new location
+            //Will move the monster if it has not reached the new location.
             if (_moving)
                 Move();
             
@@ -106,7 +106,7 @@ namespace CSProject
                 _moving = true;
             }
             
-            //Checks whether the monster has been killed
+            //Checks whether the monster has been killed.
             if(health <= 0)_alive = false;
             currentcolour = Color.White;
 
@@ -131,7 +131,7 @@ namespace CSProject
         }
 
         /// <summary>
-        /// Gets the next location that the monster needs from the stack created from the A star algorithm
+        /// Gets the next location that the monster needs from the stack created from the A star algorithm.
         /// </summary>
         private void setDestination()
         {
@@ -184,7 +184,7 @@ namespace CSProject
             //Adds the start node into activenodes list which are nodes waiting to be checked.
             var activenodes = new List<AStarNode>();
             activenodes.Add(start);
-           //Visited nodes are a list of nodes that have been checked.
+            //Visited nodes are a list of nodes that have been checked.
             var visitednodes = new List<AStarNode>();
 
             while (activenodes.Any())
@@ -192,7 +192,7 @@ namespace CSProject
                 //Gets the node that is the shortest distance away from the player.
                 var checkNode = activenodes.OrderBy(x => x.CostDistance).First();
                 
-                //If the node selected is the target then it will add the nodes to the path stack by going back through the parent nodes until the start node has been reached
+                //If the node selected is the target then it will add the nodes to the path stack by going back through the parent nodes until the start node has been reached.
                 //Will stop running the algorithm after the path has been all added to the stack.
                 if(checkNode.X == target.X && checkNode.Y == target.Y)
                 {
@@ -221,7 +221,7 @@ namespace CSProject
                 {
                     //Checks all the validnodes in the list to see if it is already in the activenodes list.
                     //If it isn't already in the list then it will be added to the list.
-                    //If it is then it will compare the distance and see whether going through the checknode is quicker than a path previously found
+                    //If it is then it will compare the distance and see whether going through the checknode is quicker than a path previously found.
                     if(activenodes.Any(x => x.X == validnode.X && x.Y == validnode.Y))
                     {
                         var existingnode = activenodes.First(x => x.X == validnode.X && x.Y == validnode.Y);

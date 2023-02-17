@@ -53,19 +53,20 @@ namespace CSProject
 
             Edge = new Rectangle((int)Location.X, (int)Location.Y, 32, 32);
 
-
+            //Will move the monster if it has not reached the new location.
             if (_moving)
                 Move();
 
 
 
-
+            //Gets the next location to be moved to if there is a path that is available and it has finished its previous movement.
             if (path.Any() && !_moving)
             {
                 setDestination();
                 _moving = true;
             }
 
+            //Checks whether the monster has been killed.
             if (health <= 0) _alive = false;
             currentcolour = Color.Blue;
 
@@ -77,7 +78,9 @@ namespace CSProject
         }
 
 
-
+        /// <summary>
+        /// Moves the monster when there is a newlocation to be moved to.
+        /// </summary>
         private void Move()
         {
             if (Location.X < newLocation.X) Location.X += _speed;
@@ -87,17 +90,35 @@ namespace CSProject
             else _moving = false;
         }
 
+        /// <summary>
+        /// Gets the next location that the monster needs from the stack created from the A star algorithm.
+        /// </summary>
         private void setDestination()
         {
             newLocation.X = path.Peek().X * 64;
             newLocation.Y = path.Pop().Y * 64;
         }
 
-
+        /// <summary>
+        /// The A star algorithm that gets the shortest path to get to the player from the monster's current location.
+        /// Gets the current location of the monster and the heuristic distance from the player.
+        /// Adds all valid nodes around the monster into a list.
+        /// Adds the start node (the monster's location) to a visitednodes list.
+        /// The next node to be checked will be the node that is the shortest distance away from the play in the validnodes list.
+        /// Repeats this process of checking nodes until the player is found.
+        /// Then will add the path to get to the player into a stack.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="maze"></param>
         public override void AStar(Player player, int[,] maze)
         {
+            //Will only run if the player has been seen.
             if (!_playerSeen) return;
+
+            //Clears any existing paths to allow for rerouting.
             path.Clear();
+
+            //Gets the Locations of the monster and the player and assigns them to the start node and target node to be found.
             var start = new AStarNode();
             start.X = (int)Location.X / 64;
             start.Y = (int)Location.Y / 64;
@@ -106,17 +127,22 @@ namespace CSProject
             target.X = (int)player.Location.X / 64;
             target.Y = (int)player.Location.Y / 64;
 
+            //Gets the heuristic distance from the monster to the player.
             start.HeuristicDistance(target.X, target.Y);
 
+            //Adds the start node into activenodes list which are nodes waiting to be checked.
             var activenodes = new List<AStarNode>();
             activenodes.Add(start);
+            //Visited nodes are a list of nodes that have been checked.
             var visitednodes = new List<AStarNode>();
 
             while (activenodes.Any())
             {
+                //Gets the node that is the shortest distance away from the player.
                 var checkNode = activenodes.OrderBy(x => x.CostDistance).First();
 
-
+                //If the node selected is the target then it will add the nodes to the path stack by going back through the parent nodes until the start node has been reached.
+                //Will stop running the algorithm after the path has been all added to the stack.
                 if (checkNode.X == target.X && checkNode.Y == target.Y)
                 {
                     var node = checkNode;
@@ -136,8 +162,12 @@ namespace CSProject
                 visitednodes.Add(checkNode);
                 activenodes.Remove(checkNode);
 
+                //Gets a list of all the valid nodes that can be travelled to around the checkNode.
                 var validnodes = GetValidNodes(maze, checkNode, target);
 
+                //Checks all the validnodes in the list to see if it is already in the activenodes list.
+                //If it isn't already in the list then it will be added to the list.
+                //If it is then it will compare the distance and see whether going through the checknode is quicker than a path previously found.
                 foreach (var validnode in validnodes)
                 {
                   
