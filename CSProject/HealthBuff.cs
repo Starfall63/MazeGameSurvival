@@ -9,9 +9,12 @@ namespace CSProject
 {
     class HealthBuff:GameObject
     {
+        #region fields
         public int amount;
         public bool touched = false;
+        #endregion
 
+        #region methods
         /// <summary>
         /// Spawns in a health item in a random place in the maze making sure it isn't spawning inside a wall.
         /// Assigns a random amount of health that can be gained between 1 and 20.
@@ -55,5 +58,6 @@ namespace CSProject
             spriteBatch.Draw(Texture, Location, Color.White);
         }
 
+        #endregion
     }
 }

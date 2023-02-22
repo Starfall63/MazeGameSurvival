@@ -14,6 +14,7 @@ namespace CSProject
 
         Vector2 newLocation;
 
+        #region methods
         /// <summary>
         /// Constructor for the phantom.
         /// Spawns the monster in a random location in the maze making sure that it does not spawn in the walls.
@@ -261,5 +262,6 @@ namespace CSProject
 
 
         }
+        #endregion
     }
 }

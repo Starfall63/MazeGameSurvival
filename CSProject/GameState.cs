@@ -10,13 +10,13 @@ namespace CSProject
 {
     public class GameState : State
     {
+        #region fields
         Random RNG = new Random();
 
+        //Size of maze and map
         public static int width = 3840;
         public static int height = 2160;
 
-        Camera2D GameCamera;
-        Vector2 CameraOffSet;
 
         Map map;
         public static int pixelsize = 64;
@@ -27,7 +27,8 @@ namespace CSProject
 
         private int timer = 0;
 
-
+        Camera2D GameCamera;
+        Vector2 CameraOffSet;
 
         SpriteFont Font;
 
@@ -36,20 +37,26 @@ namespace CSProject
         private int wave = 1;
 
 
-        int multiplier = 1;
+
         private List<monster> monsterlist = new List<monster>();
         int monsterstobespawned = 3;
+        
+        //Time delay before a new wave begins after the current wave has been finished.
         int wavebreak = 10000;
         int timeonbreak = 0;
 
+        //Time delay before a monster is able to calculate a new path.
         int timesincelastcalc = 0;
         int movebreak = 100;
 
+        //Time delay before the player is able to take damage from a monster again.
         int timesincedamaged = 1250;
         int damagewaittime = 1250;
 
         private List<HealthBuff> healthitems = new List<HealthBuff>();
         private List<SpeedBuff> speeditems = new List<SpeedBuff>();
+        
+        //Time delay before an item is spawned on the map.
         int timesincelastitem = 0;
         int itemwaittime = 20000;
         int itemsonmap;
@@ -66,6 +73,13 @@ namespace CSProject
             south,
             west
         }
+        #endregion
+
+        #region methods
+        /// <summary>
+        /// Places ones in the maze array to act as walls that will be broken in the recursive maze generation algorithm.
+        /// Calls the recursive maze generation algorithm after it has placed all the ones in the array.
+        /// </summary>
         public void initializeMaze()
         {
             for (int x = 0; x < maze.GetLength(1); x++)
@@ -78,16 +92,27 @@ namespace CSProject
         }
 
 
-
+        /// <summary>
+        /// Recursive Maze Generation algorithm that will generate a random maze when it is called.
+        /// Will leave the outer edges of the maze untouched so the player cannot go outside the maze.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void GenerateMaze(int x, int y)
         {
             Random RNG = new Random();
+            
+            //Removes the wall of the starting point.
             maze[y, x] = 0;
+            
+            //List of directions that we are able to create a path by breaking walls without going outside the boundaries.
             List<direction> options = new List<direction>();
 
             do
             {
                 options.Clear();
+                
+                //Checks all directions around the current position to see if we are able to make a valid path and adds to the list of valid directions.
                 if (x < mapwidth - 2)
                 {
                     if (maze[y, x + 2] == 1) options.Add(direction.west);
@@ -104,6 +129,7 @@ namespace CSProject
                 if (y < mapheight - 3)
                 { if (maze[y + 2, x] == 1) options.Add(direction.south); }
 
+                //If there are valid paths a random path will be created by breaking the walls in the direction selected.
                 if (options.Count > 0)
                 {
                     int choice = RNG.Next(0, options.Count);
@@ -136,7 +162,7 @@ namespace CSProject
 
 
             } while (options.Count > 0);
-
+            //Algorithm will keep running until all the possible paths have been created.
 
 
         }
@@ -152,6 +178,12 @@ namespace CSProject
             _game = game;
         }
 
+        /// <summary>
+        /// Creates the maze.
+        /// Initializes the player.
+        /// Spawns the monsters onto the map.
+        /// Initializes the camera that will follow the player.
+        /// </summary>
         public override void Initialize()
         {
             
@@ -164,6 +196,11 @@ namespace CSProject
             CameraOffSet = new Vector2(_graphicsDevice.Viewport.Width / 2, _graphicsDevice.Viewport.Height / 2);
 
         }
+
+        /// <summary>
+        /// Loads the textures of the player and walls.
+        /// Loads the font that will be used for text.
+        /// </summary>
         public override void LoadContent()
         {
             Font = _content.Load<SpriteFont>("myfont");
@@ -171,18 +208,24 @@ namespace CSProject
             player.LoadContent(_content);
             map.Generate(maze, pixelsize);
         }
+
         public override void Update(GameTime gameTime)
         {
+            //Increases the timer.
             timer += gameTime.ElapsedGameTime.Milliseconds;
             KeyboardState ks = Keyboard.GetState();
+            
+            
             if (ks.IsKeyDown(Keys.P))
             {
                 initializeMaze();
                 map.Generate(maze, pixelsize);
             }
 
+            //Checks the game has not finished.
             IsGameFinish();
 
+            //Checks and removes walls on the map where their health has fallen below zero.
             for (int i = 0; i < map.CollisionTiles.Count-1; i++)
             {
                 if (map.CollisionTiles[i].GetHealth() <= 0)
@@ -198,11 +241,13 @@ namespace CSProject
             GameCamera.Pos = player.Location - CameraOffSet;
             GameCamera.Update();
 
+            //Every monster checks whether is it able to see the player and whether a path will need to be calculated.
             foreach (monster m in monsterlist)
                 m.sensePlayer(player, maze);
 
             timesincelastcalc += gameTime.ElapsedGameTime.Milliseconds;
 
+            //If the time delay for calculating a path is reached then a path will be calculated for monsters that can see the player.
             if (timesincelastcalc >= movebreak)
             {
                 foreach (monster m in monsterlist)
@@ -213,8 +258,9 @@ namespace CSProject
             }
 
 
-
             timesincedamaged += gameTime.ElapsedGameTime.Milliseconds;
+            
+            //Checks whether a monster has intersected with a player and whether the player needs to take damage.
             foreach (monster m in monsterlist)
             {
                 m.Update(gameTime);
@@ -228,13 +274,17 @@ namespace CSProject
                        
 
                 }
+                //If a wallbreaker intersects with a wall then it will damage the wall and break it.
                 if (m.NeedToBreakWall())
                     foreach (CollisionTiles t in map.CollisionTiles)
                         if (m.Edge.Intersects(t.Rectangle))
                             t.takeDamage(m.GetDamage());
             }
+            
+            //Checks the list of monsters and removes any that have been killed.
             monsterlist = monsterlist.Where(m => m.GetAlive() == true).ToList();
 
+            //If no monsters are left and the delay before a new wave is reached then new monsters will be spawned in.
             if(monsterlist.Count == 0)
             {
                 timeonbreak += gameTime.ElapsedGameTime.Milliseconds;
@@ -249,9 +299,9 @@ namespace CSProject
 
 
 
-
-
             timesincelastitem += gameTime.ElapsedGameTime.Milliseconds;
+            
+            //If there are less than 10 items on the map and the time delay before an item is spawned is reached then an item will be randomly selected and spawned.
             if (itemsonmap < 10)
             {
                 if (timesincelastitem >= itemwaittime)
@@ -274,6 +324,7 @@ namespace CSProject
                 }
             }
 
+            //Checks whether the player has intersected with a health item and whether their health will need to be increased.
             foreach (HealthBuff h in healthitems)
             {
                 if (h.Edge.Intersects(player.Edge))
@@ -282,17 +333,25 @@ namespace CSProject
                     h.touched = true;
                 }
             }
+
+            //Removes any health items that have been picked up and used.
             healthitems = healthitems.Where(h => h.touched == false).ToList();
+
+            //Checks whether the player has intersected with a speed item and whether their speed will need to be increased.
             foreach (SpeedBuff s in speeditems)
                 if (s.Edge.Intersects(player.Edge))
                 {
                     player.gainspeed(s);
                     s.touched = true;
                 }
+
+            //Removes any speed items that have been picked up and used.
             speeditems = speeditems.Where(s => s.touched == false).ToList();
+            
+            //Counts how many items have currently been spawned and haven't been picked up.
             itemsonmap = healthitems.Count() + speeditems.Count();
 
-
+            //If there are less than 5 weapons on the map then a weapon will be randomly selected and spawned.
             if (weapons.Count < 5)
             {
                 Weapon p; 
@@ -306,6 +365,7 @@ namespace CSProject
                 weapons.Add(p);
             }
 
+            //Checks whether a player has picked up and equipped a weapon and changes the position of the weapon sprite so player can see equipped weapon.
             foreach (Weapon p in weapons)
                 if (p.Edge.Intersects(player.Edge) && ks.IsKeyDown(Keys.E))
                 {
@@ -313,7 +373,11 @@ namespace CSProject
                     p.equipped = true;
                     p.Location = new Vector2(325, 0);
                 }
+            
+            //Removes weapons from that map that have been picked up and equipped.
             weapons = weapons.Where(p => p.equipped == false).ToList();
+            
+            //If the player has a weapon equipped then it will shoot if they press space.
             if (player.equippedWeapon != null)
                 if (ks.IsKeyDown(Keys.Space) && previouskey.IsKeyUp(Keys.Space))
                     Shoot();
@@ -321,22 +385,36 @@ namespace CSProject
             UpdateBullets(gameTime);
         }
 
+        /// <summary>
+        /// Moves all the bullets that have been shot.
+        /// Checks whether the bullets that have been shot have collided with a wall or monster.
+        /// Checks whether the bullets have reached their max range.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void UpdateBullets(GameTime gameTime)
         {
             foreach (Bullets b in bullets)
             {
                 b.Update(gameTime);
+                
+                //If bullets have reached the max range then it will not be visible.
                 if (Vector2.Distance(b.Location, player.Location) > 500)
                     b.isVisible = false;
+                
                 foreach (CollisionTiles t in map.CollisionTiles)
                     if (b.Edge.Intersects(t.Rectangle))
                     {
+                        //If a raygun bullet has hit a wall then it will damage the wall.
                         if (b.type == "RayGun")
                             t.takeDamage(b.damage);
+                        //Nothing will happen if a laser bullet hits a wall as it can go through them.
                         else if (b.type == "Laser")
                             continue;
                         b.isVisible = false;
+                        //Any bullet that isn't from a laser will not be visible when it has hit a wall.
                     }
+                
+                //Checks whether any bullets have intersected with any monsters and whether they will need to take damage.
                 foreach(monster m in monsterlist)
                     if (b.Edge.Intersects(m.Edge))
                     {
@@ -346,6 +424,7 @@ namespace CSProject
                 
             }
 
+            //Removes any bullets from the bullets list that are not visible.
             for (int i = 0; i < bullets.Count; i++)
             {
 
@@ -357,6 +436,10 @@ namespace CSProject
             }
         }
 
+        /// <summary>
+        /// When the player shoots their weapon then a new bullet of that weapon's type is created.
+        /// Assigns the direction that the bullet will be moved in.
+        /// </summary>
         public void Shoot()
         {
             Bullets newBullet;
@@ -386,12 +469,16 @@ namespace CSProject
             newBullet.Location.Y = player.Location.Y + 18 + newBullet.Velocity.Y * 5;
             newBullet.isVisible = true;
 
+            //Ensures that no more than 20 bullets can be shot at any one time.
             if (bullets.Count() < 20)
                 bullets.Add(newBullet);
 
 
         }
 
+        /// <summary>
+        /// If the limit to the monsters to be spawned have not been reached then a monster will be randomly selected and spawned.
+        /// </summary>
         public void SpawnMonsters()
         {
             for (int i = 0; i < monsterstobespawned; i++)
@@ -418,11 +505,20 @@ namespace CSProject
             }
         }
 
+        /// <summary>
+        /// Checks whether the player has not died.
+        /// If the player has died then the game will go to the end screen with the game stats to be displayed.
+        /// </summary>
         public void IsGameFinish()
         {
             if (player.health <= 0) _game.ChangeState(new EndState(_game, _graphicsDevice, _content, wave, timer));
         }
 
+        /// <summary>
+        /// Draws all the sprites in the game.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: GameCamera.Transform);
@@ -456,7 +552,8 @@ namespace CSProject
 
 
         }
+        #endregion
 
-        
+
     }
 }

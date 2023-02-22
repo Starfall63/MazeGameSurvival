@@ -9,6 +9,7 @@ namespace CSProject
 {
     class monster : GameObject
     {
+        #region fields
         public enum Direction
         {
             down,
@@ -30,7 +31,9 @@ namespace CSProject
 
         protected Stack<AStarNode> path = new Stack<AStarNode>();
 
+        #endregion
 
+        #region methods
         public int GetDamage()
         {
             return _damage;
@@ -325,6 +328,8 @@ namespace CSProject
 
 
         }
+
+        #endregion
 
     }
 }

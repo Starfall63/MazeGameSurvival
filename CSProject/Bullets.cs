@@ -10,13 +10,16 @@ namespace CSProject
 {
     internal class Bullets:GameObject
     {
-
+        #region fields
         public int damage;
         public Vector2 Velocity;
 
         public string type;
         public bool isVisible;
 
+        #endregion
+
+        #region methods
         /// <summary>
         /// Constructor assigning the texture and type of bullet being created.
         /// </summary>
@@ -48,9 +51,9 @@ namespace CSProject
             spriteBatch.Draw(Texture, Location, Color.White);
         }
 
+        #endregion
 
 
-        
 
     }
 }

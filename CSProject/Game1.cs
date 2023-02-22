@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-//gitgubmactest6
+
 namespace CSProject
 {
     public class Game1 : Game
     {
+        #region fields
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -15,7 +16,9 @@ namespace CSProject
 
         private State _currentState;
         private State _nextState;
+        #endregion
 
+        #region methods
         public void ChangeState(State state)
         {
             _nextState = state;
@@ -81,5 +84,6 @@ namespace CSProject
             _currentState.Draw(gameTime,spriteBatch);
             base.Draw(gameTime);
         }
+        #endregion
     }
 }

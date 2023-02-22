@@ -10,10 +10,14 @@ namespace CSProject
 {
     internal class Tiles
     {
+        #region fields
         protected Texture2D texture;
         public const int maxhealth = 50;
         protected int health;
         private Rectangle rectangle;
+      
+
+
         public Rectangle Rectangle
         {
             get { return rectangle; }
@@ -26,12 +30,15 @@ namespace CSProject
             protected  get { return content; }
             set { content = value; }
         }
-        
+
+        #endregion
+
+        #region methods
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, rectangle, Color.White);
         }
-
+        #endregion
 
 
 

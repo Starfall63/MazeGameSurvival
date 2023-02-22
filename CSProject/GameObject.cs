@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace CSProject
 {
-    public abstract class GameObject
+    public class GameObject
     {
         #region fields
 

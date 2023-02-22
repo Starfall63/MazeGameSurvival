@@ -10,6 +10,7 @@ namespace CSProject
 {
     class Button
     {
+        #region fields
         private MouseState _currentMouse;
 
         private MouseState _previousMouse;
@@ -29,6 +30,7 @@ namespace CSProject
 
         public Vector2 Position { get; set; }
 
+
         public Rectangle Rectangle
         {
             get
@@ -39,7 +41,9 @@ namespace CSProject
 
         public string Text { get; set; }
 
+        #endregion
 
+        #region methods
         public Button(Texture2D texture, SpriteFont font)
         {
             _texture = texture;
@@ -94,5 +98,6 @@ namespace CSProject
             }
         }
 
+        #endregion
     }
 }

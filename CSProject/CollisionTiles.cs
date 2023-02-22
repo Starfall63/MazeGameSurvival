@@ -8,6 +8,7 @@ namespace CSProject
 {
     internal class CollisionTiles:Tiles
     {
+        #region methods
         public CollisionTiles(int i, Rectangle newRectangle)
         {
             texture = Content.Load<Texture2D>("Tile" + i);
@@ -32,6 +33,7 @@ namespace CSProject
         {
             health -= damage;
         }
+        #endregion
 
     }
 }

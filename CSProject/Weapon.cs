@@ -10,12 +10,15 @@ namespace CSProject
 {
     class Weapon:GameObject
     {
+        #region fields
         public int damage;
         public bool equipped = false;
         protected KeyboardState previousKey;
         protected KeyboardState currentKey;
         public string type;
-       
+        #endregion
+
+        #region methods
         /// <summary>
         /// Spawns a weapon in a random place in the maze making sure it isn't inside a wall.
         /// Assigns the type of weapon that is being created.
@@ -62,6 +65,8 @@ namespace CSProject
         {
             spriteBatch.Draw(Texture, Location, Color.White);
         }
+
+        #endregion
 
     }
 }

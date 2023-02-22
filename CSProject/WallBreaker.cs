@@ -9,8 +9,11 @@ namespace CSProject
 
     class WallBreaker: monster
     {
+        #region fields
         Vector2 newLocation;
+        #endregion
 
+        #region methods
         /// <summary>
         /// Constructor for the wallbreaker.
         /// Spawns the monster in a random location in the maze making sure that it does not spawn in the walls.
@@ -263,5 +266,7 @@ namespace CSProject
 
 
         }
+
+        #endregion
     }
 }

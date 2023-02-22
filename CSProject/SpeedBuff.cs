@@ -9,10 +9,13 @@ namespace CSProject
 {
     class SpeedBuff:GameObject
     {
+        #region fields
         public int amount;
         public int bufftime;
         public bool touched = false;
+        #endregion
 
+        #region methods
         /// <summary>
         /// Constructor that will spawn the speed item in a random place in the maze making sure it isn't inside a wall.
         /// Assigns a random amount of speed a player will gain when picking up a speed item between 1 and 8.
@@ -59,6 +62,6 @@ namespace CSProject
             spriteBatch.Draw(Texture, Location, Color.White);
         }
 
-
+        #endregion
     }
 }

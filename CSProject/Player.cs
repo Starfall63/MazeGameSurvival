@@ -11,7 +11,7 @@ namespace CSProject
 {
     class Player : GameObject
     {
-
+        #region fields
         public enum Direction
         {
             down,
@@ -33,7 +33,9 @@ namespace CSProject
         private const int maxHealth = 100;
         public int health;
         public Weapon equippedWeapon;
+        #endregion
 
+        #region methods
         /// <summary>
         /// Spawns the player in a random place in the maze making sure it isn't inside a wall.
         /// </summary>
@@ -69,10 +71,9 @@ namespace CSProject
         public void Update(GameTime gameTime, List<CollisionTiles> tiles)
         {
             currentcolour = Color.White;
-            Edge = new Rectangle((int)Location.X, (int)Location.Y, 32, 54);
+            Edge = new Rectangle((int)Location.X, (int)Location.Y, 24, 46);
 
-            //Resets the speed of the player back to normal when the speed buff has worn out.
-            if (bufftime == 0) speed = baseSpeed;
+           
 
             KeyboardState ks = Keyboard.GetState();
 
@@ -240,6 +241,6 @@ namespace CSProject
             currentcolour = Color.Red;
         }
 
-
+        #endregion
     }
 }

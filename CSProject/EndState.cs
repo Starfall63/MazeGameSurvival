@@ -10,13 +10,16 @@ namespace CSProject
 {
     public class EndState : State
     {
+        #region fields
         SpriteFont Font;
         Button returnButton;
         Button QuitButton;
         private int _waves;
         private int _seconds;
         string gamestats;
+        #endregion
 
+        #region methods
         /// <summary>
         /// Constructor for the EndState.
         /// Loads all of the statistics that will be displayed to the plaer after they die.
@@ -108,7 +111,7 @@ namespace CSProject
             spriteBatch.End();
         }
 
-        
-       
+
+        #endregion
     }
 }

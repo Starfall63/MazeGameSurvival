@@ -10,14 +10,15 @@ namespace CSProject
 {
     public class MenuState : State
     {
-
+        #region fields
         SpriteFont Font;
         SpriteFont TitleFont;
         Button startButton;
         Button HowtoPlayButton;
         Button QuitButton;
+        #endregion
 
-
+        #region methods
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
             _content = content;
@@ -117,6 +118,7 @@ namespace CSProject
             spriteBatch.DrawString(TitleFont, "SURVIVE THE MAZE", new Vector2(Game1.screenwidth / 5, Game1.screenheight / 4), Color.Red);
             spriteBatch.End();
         }
-        
+        #endregion
+
     }
 }
