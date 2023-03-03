@@ -288,7 +288,7 @@ namespace CSProject
             int currentx = (int)Location.X / 64;
             int currenty = (int)Location.Y / 64;
 
-            for (int i = currentx-10; i < currentx+10; i++)
+            for (int i = currentx; i < currentx+10; i++)
             {
                 if (i <= 0) continue;
                 if (maze[currenty, i] == 1) break;
