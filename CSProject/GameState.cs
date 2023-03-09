@@ -10,7 +10,7 @@ namespace CSProject
 {
     public class GameState : State
     {
-        //ridertest
+        //ridertest2
         #region fields
         Random RNG = new Random();
 
